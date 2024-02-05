@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.view.View
 import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     private var num1: Float = 0.0.toFloat()
     private var num2: Float = 0.0.toFloat()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -33,98 +35,40 @@ class MainActivity : AppCompatActivity() {
         op2 = findViewById<EditText>(R.id.operand2)
         output = findViewById<TextView>(R.id.output)
 
-        addButton.setOnClickListener { performOperation(Operation.ADD) }
-        subButton.setOnClickListener { performOperation(Operation.SUBTRACT) }
-        mulButton.setOnClickListener { performOperation(Operation.MULTIPLY) }
-        divButton.setOnClickListener { performOperation(Operation.DIVIDE) }
-        modButton.setOnClickListener { performOperation(Operation.MODULO) }
+// referenced ChatGPT to learn more about it and how it refers to the View
+// that triggered the click event to access properties or perform actions related to the View event
+        addButton.setOnClickListener { performOperation(it) }
+        subButton.setOnClickListener { performOperation(it)}
+        mulButton.setOnClickListener { performOperation(it) }
+        divButton.setOnClickListener { performOperation(it) }
+        modButton.setOnClickListener { performOperation(it) }
     }
 
-    private fun performOperation(operation: Operation) {
+    private fun performOperation(view: View) {
         if (op1.text.isNotEmpty() && op2.text.isNotEmpty()) {
             num1 = op1.text.toString().toFloat()
             num2 = op2.text.toString().toFloat()
 
-            when (operation) {
-                Operation.ADD -> output.text = (num1 + num2).toString()
-                Operation.SUBTRACT -> output.text = (num1 - num2).toString()
-                Operation.MULTIPLY -> output.text = (num1 * num2).toString()
-                Operation.DIVIDE -> output.text = if (num2 != 0.0.toFloat()) (num1 / num2).toString() else "Cannot divide by zero"
-                Operation.MODULO -> output.text = if (num2 != 0.0.toFloat()) (num1 % num2).toString() else "Cannot calculate modulo by zero"
+//            referenced ChatGPT/ Google/ Kotlin Documentation to figure out the Kotlin equivalent of C's switch
+//             got inspo from below:
+//            when (view.id) {
+//                R.id.add_button -> output.text = (num1 + num2).toString()
+//                R.id.sub_button -> output.text = (num1 - num2).toString()
+//                R.id.mul_button -> output.text = (num1 * num2).toString()
+//                R.id.div_button -> output.text = if (num2 != 0.0.toFloat()) (num1 / num2).toString() else "Cannot divide by zero"
+//                R.id.mod_button -> output.text = if (num2 != 0.0.toFloat()) (num1 % num2).toString() else "Cannot calculate modulo by zero"
+//            }
+            when (view.id) {
+                R.id.add_button -> output.text = (num1 + num2).toString()
+                R.id.sub_button -> output.text = (num1 - num2).toString()
+                R.id.mul_button -> output.text = (num1 * num2).toString()
+                R.id.div_button -> output.text = if (num2 != 0.0.toFloat()) (num1 / num2).toString() else "Cannot divide by zero"
+                R.id.mod_button -> output.text = if (num2 != 0.0.toFloat()) (num1 % num2).toString() else "Cannot calculate modulo by zero"
             }
+
         } else {
             output.text = "Please enter both operands."
         }
     }
 
-    enum class Operation {
-        ADD, SUBTRACT, MULTIPLY, DIVIDE, MODULO
-    }
 }
-
-//import android.os.Bundle
-//import android.view.View
-//import android.widget.RadioButton
-//import android.widget.Toast
-//import androidx.appcompat.app.AppCompatActivity
-//
-//
-//class MainActivity : AppCompatActivity() {
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_main)
-//
-//        calculateButton.setOnClickListener {
-//            calculate()
-//        }
-//    }
-//
-//    private fun calculate() {
-//        try {
-//            val operand1 = editTextOperand1.text.toString().toDouble()
-//            val operand2 = editTextOperand2.text.toString().toDouble()
-//
-//            val result = when (getSelectedOperation()) {
-//                R.id.radioButtonAddition -> operand1 + operand2
-//                R.id.radioButtonSubtraction -> operand1 - operand2
-//                R.id.radioButtonMultiplication -> operand1 * operand2
-//                R.id.radioButtonDivision -> {
-//                    if (operand2 != 0.0) {
-//                        operand1 / operand2
-//                    } else {
-//                        showToast("Divide by Zero not allowed.")
-//                        return
-//                    }
-//                }
-//                R.id.radioButtonModulus -> {
-//                    if (operand2 != 0.0) {
-//                        operand1 % operand2
-//                    } else {
-//                        showToast("Modulus with zero not allowed.")
-//                        return
-//                    }
-//                }
-//                else -> throw IllegalArgumentException("Invalid operation selected")
-//            }
-//
-//            textViewResult.text = "Result: $result"
-//        } catch (e: NumberFormatException) {
-//            showToast("Invalid Operand. Please enter valid numbers.")
-//        }
-//    }
-//
-//    private fun getSelectedOperation(): Int {
-//        val selectedOperationId = radioGroupOperations.checkedRadioButtonId
-//        if (selectedOperationId == -1) {
-//            showToast("Please select an operation.")
-//            throw IllegalStateException("No operation selected")
-//        }
-//
-//        return selectedOperationId
-//    }
-//
-//    private fun showToast(message: String) {
-//        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-//    }
-//}
